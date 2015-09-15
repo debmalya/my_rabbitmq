@@ -45,6 +45,35 @@ public class RabbitMQExchangeFactory {
 	}
 
 	
+	/**
+	 * @param exchangeName
+	 *            to be created.
+	 * @param exchangeType to be created.           
+	 * @return true if exchange created successfully.
+	 * @throws IOException
+	 * @throws Throwable
+	 */
+	public boolean createDefaulChannel(String exchangeName,String exchangeType) {
+		Channel channel;
+		boolean isOK = true;
+		try {
+			channel = RabbitMQConnectionFactory.getDefaultConnection()
+					.createChannel();
+			channel.exchangeDeclare(exchangeName, exchangeType);
+		} catch (IOException e) {
+			LOGGER.error(e.getMessage(), e);
+			e.printStackTrace();
+			isOK = false;
+		} catch (Throwable e) {
+			LOGGER.error(e.getMessage(), e);
+			e.printStackTrace();
+			isOK = false;
+		}
+
+		return isOK;
+	}
+
+	
 
 	private static class GCEExchangeFactoryHolder {
 		private final static RabbitMQExchangeFactory instance = new RabbitMQExchangeFactory();
