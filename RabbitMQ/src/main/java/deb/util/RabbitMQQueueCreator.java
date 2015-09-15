@@ -18,11 +18,20 @@ public class RabbitMQQueueCreator {
 
 	}
 
-	public boolean createQueueInExchange(String queueName, String exchangeName,String routingKey) {
+	/**
+	 * 
+	 * @param queueName
+	 * @param exchangeName
+	 * @param exchangeType
+	 * @param routingKey
+	 * @return
+	 */
+	public boolean createQueueInExchange(String queueName, String exchangeName,String exchangeType,String routingKey) {
 		boolean isOK = false;
 		 try {
 			com.rabbitmq.client.Channel channel = RabbitMQConnectionFactory.getDefaultConnection().createChannel();
-			channel.exchangeDeclare(exchangeName, "fanout");
+			channel.exchangeDeclare(exchangeName, exchangeType);
+			channel.queueDeclare(queueName, false, false, false, null);
 			channel.queueBind(queueName, exchangeName, routingKey);
 			isOK = true;
 		} catch (IOException e) {
